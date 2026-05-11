@@ -35,11 +35,20 @@ public class ClassPathLoader implements ILoader<Object>
     void extendClassPath(URL url) throws NoSuchMethodException, SecurityException,
         IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
-        URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class<URLClassLoader> urlClass = URLClassLoader.class;
-        Method method = urlClass.getDeclaredMethod("addURL", URL.class);
-        method.setAccessible(true);
-        method.invoke(urlClassLoader, url);
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        if (systemClassLoader instanceof URLClassLoader)
+        {
+            URLClassLoader urlClassLoader = (URLClassLoader) systemClassLoader;
+            Class<URLClassLoader> urlClass = URLClassLoader.class;
+            Method method = urlClass.getDeclaredMethod("addURL", URL.class);
+            method.setAccessible(true);
+            method.invoke(urlClassLoader, url);
+        }
+        else
+        {
+            System.err.println("Cannot extend classpath: System ClassLoader is not a URLClassLoader on this JVM (Java 9+).");
+            System.err.println("Classpath extension via reflection is not supported. Resource: " + url);
+        }
     }
 
     /*
