@@ -137,6 +137,7 @@ public class BytecodeViewer
     public static List<Process> createdProcesses = new ArrayList<>();
 
     //Security Manager for dynamic analysis debugging
+    @SuppressWarnings("removal")
     public static SecurityMan sm = new SecurityMan();
 
     //GSON Reference
@@ -157,6 +158,7 @@ public class BytecodeViewer
      *
      * @param args files you want to open or CLI
      */
+    @SuppressWarnings("removal")
     public static void main(String[] args)
     {
         launchArgs = args;
